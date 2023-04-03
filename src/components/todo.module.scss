@@ -32,7 +32,22 @@
     margin-left: 5px;
   }
 
+  .completedItem{
+    text-decoration: line-through;
+  }
+
   .icon{
     cursor: pointer;
+  }
+
+  .cardContent{
+    max-height: 450px;
+    overflow-y: auto;
+  }
+
+  .todoActions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }

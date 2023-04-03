@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	Box,
 	Button,
@@ -8,7 +8,6 @@ import {
 	Checkbox,
 	Grid,
 	InputAdornment,
-	Radio,
 	TextField,
 	Typography,
 	useTheme,
@@ -17,37 +16,48 @@ import styles from './todo.module.scss'
 import NightlightRoundIcon from '@mui/icons-material/NightlightRound'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import CloseIcon from '@mui/icons-material/Close'
+import { v4 as uuidv4 } from 'uuid'
+import classNames from 'classnames'
+import TodoAction from './TodoAction'
+import TodoItem from './TodoItem'
 
-type OneToDo = {
+export type OneToDo = {
 	id: string | number
 	name: string
 	completed: boolean
 }
+
+const updatedList = (action: string, list: OneToDo[]) => {
+	if (action === 'all') return { [action]: list }
+	return {
+		[action]: list.filter((item) => {
+			if (action === 'completed') {
+				return item.completed
+			} else {
+				return !item.completed
+			}
+		}),
+	}
+}
 const Todo = () => {
 	const theme = useTheme()
+	const [input, setInput] = useState('')
 	const [todoList, setTodoList] = useState<OneToDo[]>([])
-	const [todo, setTodo] = useState<OneToDo>({
-		id: '',
-		name: '',
-		completed: false,
-	})
+	const [filteredList, setFilteredList] = useState<OneToDo[]>([])
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const item = {
-			id: todoList.length + 1,
-			name: event.target.value,
-			completed: false,
-		}
-		setTodo(item)
+		setInput(event.target.value)
 	}
 
 	const handleOnClick = () => {
-		setTodoList((prev) => prev.concat(todo))
-		setTodo({
-			id: '',
-			name: '',
+		if (input === '') return
+		const item = {
+			id: uuidv4(),
+			name: input,
 			completed: false,
-		})
+		}
+		setTodoList((prev) => prev.concat(item))
+		setInput('')
 	}
 
 	const handleDelete = (id: number | string) => {
@@ -56,16 +66,61 @@ const Todo = () => {
 	}
 
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-		console.log('event', event.target)
 		if (event.key === 'Enter') {
+			if ((event.target as HTMLButtonElement).value === '') return
 			const item = {
-				id: todoList.length + 1,
-				name: 'abc',
+				id: uuidv4(),
+				name: (event.target as HTMLButtonElement).value,
 				completed: false,
 			}
-			setTodo(item)
+			setTodoList((prev) => prev.concat(item))
+			setInput('')
 		}
 	}
+
+	const handleCompleted = (id: string | number) => {
+		let completed = [...todoList]
+		const completedList = completed.map((item) => {
+			if (item.id === id) {
+				return {
+					...item,
+					completed: !item.completed,
+				}
+			}
+			return { ...item }
+		})
+		setTodoList(completedList)
+	}
+
+	const handleActive = () => {
+		const list = [...todoList]
+		const result = list.filter((item) => !item.completed)
+		setFilteredList(result)
+	}
+	const handleAll = () => {
+		const list = [...todoList]
+		setFilteredList(list)
+	}
+	const filterCompleted = () => {
+		const list = [...todoList]
+		const result = list.filter((item) => item.completed)
+		setFilteredList(result)
+	}
+	const handleClearCompleted = () => {
+		const list = [...todoList]
+		const result = list.filter((item) => item.completed)
+		setFilteredList(result)
+	}
+
+	const handleClearAll = () => {
+		setTodoList([])
+		setFilteredList([])
+	}
+
+	const handleActions = (item: string) => {
+		console.log('list', updatedList(item, todoList))
+	}
+	console.log('fil', filteredList)
 	return (
 		<div className={styles.mainTodo}>
 			<Grid container>
@@ -84,7 +139,8 @@ const Todo = () => {
 						name='todo'
 						onChange={handleChange}
 						onKeyDown={handleKeyDown}
-						value={todo.name}
+						value={input}
+						placeholder='Create A New Todo...'
 						InputProps={{
 							endAdornment: (
 								<InputAdornment
@@ -100,28 +156,25 @@ const Todo = () => {
 				</Grid>
 				<Grid item xs={12}>
 					<Card elevation={3}>
-						<CardContent>
-							{todoList.map((item) => (
-								<Box className={styles.todoItem}>
-									<Box className={styles.todoCompleted}>
-										<Checkbox checked={item.completed} />
-										<Typography key={item.id} className={styles.item}>
-											{item.name}
-										</Typography>
-									</Box>
-									<CloseIcon
-										className={styles.icon}
-										onClick={() => handleDelete(item.id)}
+						<CardContent className={styles.cardContent}>
+							{todoList.length > 0 ? (
+								todoList.map((item) => (
+									<TodoItem
+										key={item.id}
+										item={item}
+										handleDelete={handleDelete}
+										handleCompleted={handleCompleted}
 									/>
-								</Box>
-							))}
+								))
+							) : (
+								<Typography textAlign={'center'}>Items Not Found!</Typography>
+							)}
 						</CardContent>
-						<CardActions>
-							<Button color='secondary'>{todoList.length} Item</Button>
-							<Button color='secondary'>All</Button>
-							<Button color='secondary'>Completed</Button>
-							<Button color='secondary'>Clear Completed</Button>
-							<Button color='secondary'>Clear All</Button>
+						<CardActions className={styles.todoActions}>
+							<TodoAction
+								handleActions={handleActions}
+								counter={todoList.length}
+							/>
 						</CardActions>
 					</Card>
 				</Grid>
