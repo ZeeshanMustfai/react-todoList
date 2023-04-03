@@ -1,0 +1,38 @@
+.mainTodo{
+  margin: auto 600px;
+  .todoTitle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .addButton{
+    cursor: pointer;
+  }
+
+  .footer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .todoItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+  }
+  .todoCompleted{
+    display: flex;
+    align-items: center;
+  }
+
+  .item{
+    margin-left: 5px;
+  }
+
+  .icon{
+    cursor: pointer;
+  }
+}
