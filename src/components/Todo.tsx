@@ -136,9 +136,14 @@ const Todo = () => {
 						<NightlightRoundIcon
 							color='secondary'
 							onClick={() => handleTheme('dark')}
+							className={styles.themeIcon}
 						/>
 					) : (
-						<LightMode color='secondary' onClick={() => handleTheme('light')} />
+						<LightMode
+							color='secondary'
+							onClick={() => handleTheme('light')}
+							className={styles.themeIcon}
+						/>
 					)}
 				</Grid>
 				<Grid item xs={12}>
