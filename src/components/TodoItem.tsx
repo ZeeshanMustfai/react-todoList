@@ -17,6 +17,7 @@ const TodoItem = ({ item, handleCompleted, handleDelete }: TodoItemProps) => {
 				<Checkbox
 					checked={item.completed}
 					onChange={() => handleCompleted(item.id)}
+					color='secondary'
 				/>
 				<Typography
 					key={item.id}

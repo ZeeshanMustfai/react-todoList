@@ -1,5 +1,6 @@
 .mainTodo{
   margin: auto 600px;
+  padding-top: 20px;
   .todoTitle{
     display: flex;
     justify-content: space-between;
@@ -20,7 +21,7 @@
   .todoItem{
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     
   }
   .todoCompleted{

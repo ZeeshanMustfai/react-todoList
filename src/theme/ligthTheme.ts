@@ -3,13 +3,13 @@ import { createTheme } from "@mui/material";
 export const lighTheme = createTheme({
   palette: {
     primary: {
-      main: '#FFF2CC'
+      main: '#000'
     },
     secondary:{
-      main: '#FFD966'
+      main: '#000'
     },  
     background: {
-      default: '#454545'
+      default: '#E8E2E2'
     }
   },
   
