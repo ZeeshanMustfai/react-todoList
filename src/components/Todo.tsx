@@ -46,7 +46,6 @@ const Todo = () => {
 			name: input,
 			completed: false,
 		}
-		console.log('is', isFilterd)
 		setTodoList((prev) => prev.concat(item))
 		setInput('')
 		setIsFilter(false)
