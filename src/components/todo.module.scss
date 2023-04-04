@@ -1,6 +1,7 @@
 .mainTodo{
-  margin: auto 600px;
-  padding-top: 20px;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px;
   .todoTitle{
     display: flex;
     justify-content: space-between;
@@ -42,7 +43,8 @@
   }
 
   .cardContent{
-    max-height: 450px;
+    min-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
   }
 
@@ -50,5 +52,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 10px;
+    box-shadow: 0px -2px 5px rgb(209, 199, 199);
   }
 }
